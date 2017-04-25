@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<project name="buildSystem" default="deploy" basedir="." xmlns:sf="antlib:com.salesforce">
+
+	<taskdef uri="antlib:com.salesforce"
+			 resource="com/salesforce/antlib.xml"
+			 classpath="${basedir}/lib/ant-salesforce.jar"/> 
+			 
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties">
+	  <classpath>
+		<pathelement location="${basedir}/lib/ant-contrib-1.0b3.jar"/>
+	  </classpath>
+	</taskdef>
+	<taskdef resource="net/sf/antcontrib/antlib.xml">
+	  <classpath>
+		<pathelement location="${basedir}/lib/ant-contrib-1.0b3.jar"/>
+	  </classpath>
+	</taskdef>
+	
+	<property file="build.properties"/>
+	<property environment="env"/>
+
+	<import file="${basedir}/lib/deployOnly.xml"/>
+	<import file="${basedir}/lib/deployAndRunAllTests.xml"/>
+	<import file="${basedir}/lib/validatePackage.xml"/>
+	<import file="${basedir}/lib/validatePackageAndRunTests.xml"/>
+	<import file="${basedir}/lib/package_generator.xml"/>
+	<import file="${basedir}/lib/utils.xml"/>
+</project>

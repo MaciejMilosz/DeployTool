@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<project name="utils" xmlns:sf="antlib:com.salesforce">
+    <property name="namespace" value=""/>
+    <property name="filesWithDeprecated"  value="${sf.filesWithDeprecated}"/>
+    <property name="filesWithNamespace" value="${sf.filesWithNamespace}"/>
+    <property name="mainNamespace" value="${sf.mainNamespace}"/>
+
+    <property name="ml-ant-http.jar" value="ml-ant-http-1.1.3.jar"/>
+    <property name="xmltask.jar" value="xmltask.jar"/>
+    <fileset id="runtime.libs" dir="lib">
+    <include name="${ml-ant-http.jar}"/>
+    </fileset>
+    <fileset id="xmltask.libs" dir="lib">
+    <include name="${xmltask.jar}"/>
+    </fileset>
+
+    <path id="runtime.classpath">
+    <fileset refid="runtime.libs"/>
+    </path>
+    <path id="xmltask.classpath">
+    <fileset refid="xmltask.libs"/>
+    </path>
+
+    <taskdef name="http" classname="org.missinglink.ant.task.http.HttpClientTask">
+    <classpath refid="runtime.classpath"/>
+    </taskdef>
+    <taskdef name="xmltask" classname="com.oopsconsultancy.xmltask.ant.XmlTask">
+    <classpath refid="xmltask.classpath"/>
+    </taskdef>
+
+    <macrodef name="login">
+        <attribute name="username" description="Salesforce user name."/>
+        <attribute name="password" description="Salesforce password."/>
+        <attribute name="serverurl" description="Server Url property."/>
+        <attribute name="sessionId" description="Session Id property."/>
+        <sequential>
+            <!-- Obtain Session Id via Login SOAP service -->
+            <http url="https://login.salesforce.com/services/Soap/c/29.0" method="POST" failonunexpected="false" entityProperty="loginResponse" statusProperty="loginResponseStatus">
+                <headers>
+                    <header name="Content-Type" value="text/xml"/>
+                    <header name="SOAPAction" value="login"/>
+                </headers>
+                <entity>
+                    <![CDATA[
+                        <env:Envelope xmlns:xsd='http://www.w3.org/2001/XMLSchema' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:env='http://schemas.xmlsoap.org/soap/envelope/'>
+                            <env:Body>
+                                <sf:login xmlns:sf='urn:enterprise.soap.sforce.com'>
+                                    <sf:username>@{username}</sf:username>
+                                    <sf:password>@{password}</sf:password>
+                                </sf:login>
+                            </env:Body>
+                        </env:Envelope>
+                    ]]>
+                </entity>
+            </http>
+            <!-- Parse response -->
+            <xmltask destbuffer="loginResponseBuffer">
+                <insert path="/">${loginResponse}</insert>
+            </xmltask>
+            <if>
+                <!-- Success? -->
+                <equals arg1="${loginResponseStatus}" arg2="200"/>
+                <then>
+                    <!-- Parse sessionId and serverUrl -->
+                    <xmltask sourcebuffer="loginResponseBuffer" failWithoutMatch="true">
+                        <copy path="/*[local-name()='Envelope']/*[local-name()='Body']/:loginResponse/:result/:sessionId/text()" property="@{sessionId}"/>
+                        <copy path="/*[local-name()='Envelope']/*[local-name()='Body']/:loginResponse/:result/:serverUrl/text()" property="@{serverUrl}"/>
+                    </xmltask>
+                    <echo message="session: ${sessionId}" />
+                    <echo message="serverUrl: ${serverUrl}" />
+                </then>
+                <else>
+                    <!-- Parse login error message and fail build -->
+                    <xmltask sourcebuffer="loginResponseBuffer" failWithoutMatch="true">
+                        <copy path="/*[local-name()='Envelope']/*[local-name()='Body']/*[local-name()='Fault']/*[local-name()='faultstring']/text()" property="faultString"/>
+                    </xmltask>
+                    <fail message="${faultString}"/>
+                </else>
+            </if>
+        </sequential>
+    </macrodef>
+
+    <macrodef name="runQuery" description="Run database query">
+        <attribute name="sessionId" description="Salesforce user name."/>
+        <attribute name="serverUrl" description="Salesforce url."/>
+        <attribute name="query" description="Salesforce password."/>
+        <attribute name="queryResult" description="Query result property name"/>
+        <sequential>
+            <propertyregex property="host"
+              input="${serverUrl}"
+              regexp="^((http[s]?|ftp):\/)?\/?([^:\/\s]+)((\/\w+)*\/)([\w\-\.]+[^#?\s]+)(.*)?(#[\w\-]+)?$"
+              select="\3"
+              casesensitive="false" />           
+            <http url="https://${host}/services/data/v39.0/query" method="GET" entityProperty="queryResultResponse" statusProperty="loginResponseStatus" printrequestheaders="false" printresponseheaders="false">
+                <headers>
+                    <header name="Authorization" value="Bearer ${sessionId}"/>
+                </headers>
+                <query>
+                    <parameter name="q" value="@{query}"/>
+                </query>
+            </http>       
+            <property name="@{queryResult}" value="${queryResultResponse}"/>
+        </sequential>
+    </macrodef>
+
+
+    <target name="queryNamespace" description="queries for org namespace">
+        <echo message="---------------------queryNamespace--------------------"/>
+        <login
+            username="${sf.username}"
+            password="${sf.password}"
+            serverurl="serverUrl"
+            sessionId="sessionId"/>
+        <runQuery
+            sessionId="${sessionId}"
+            serverUrl="${serverUrl}"
+            queryResult="queryresults"
+            query="SELECT Id, NamespacePrefix FROM Organization"/>
+        <echo message="query result: ${queryresults}" />
+
+        <script language="javascript">
+            var response = eval('('+project.getProperty('queryresults')+')');
+            if(response.records[0].NamespacePrefix != null){
+                project.setProperty('namespace', response.records[0].NamespacePrefix);
+            }
+        </script>
+        <echo message="---------------------/queryNamespace--------------------"/>
+        <echo message="namespace: ${namespace}" />
+    </target>
+
+    <target name="clearPackage">
+      <delete file="deploy.zip" failonerror="false"/>
+    </target>
+       
+    <target name="makePackage" description="Deploys code local src dir to salesforce org specified in build.properties!" depends="clearPackage, queryNamespace">
+        <antcall target="generatePackage" />
+            <echo message="Deploying to ${namespace} dev org." />
+            <for list="${filesWithDeprecated}" param="fileWithDeprecated">
+                <sequential>
+                    <echo message="Commenting @deprecated in ${fileWithDeprecated}." />
+                    <replace file="${fileWithDeprecated}" token="@deprecated" value="//@deprecated"/>
+                </sequential>
+            </for>
+            <for list="${filesWithNamespace}" param="fileWithNamespace">
+                <sequential>
+                    <echo message="Changing namespace prefixes in ${fileWithNamespace}." />
+                    <replace file="${fileWithNamespace}" token="${mainNamespace}" value="${namespace}"/>
+                </sequential>
+            </for>
+        <zip destfile="deploy.zip" update="true">
+            <fileset dir="src" includes="classes/*.cls,classes/*-meta.xml"/>
+            <fileset dir="src" includes="package.xml"/>
+            <fileset dir="src" includes="applications/*.app"/>
+            <fileset dir="src" includes="components/*.component,components/*-meta.xml"/>
+            <fileset dir="src" includes="documents/" excludes=".svn/" />
+            <fileset dir="src" includes="homePageComponents/" excludes=".svn/" />
+            <fileset dir="src" includes="labels/CustomLabels.labels"/>
+            <fileset dir="src" includes="layouts/*.layout"/>
+            <fileset dir="src" includes="objects/*.object"/>
+            <fileset dir="src" includes="pages/*.page,pages/*-meta.xml"/>
+            <fileset dir="src" includes="profiles/"/>
+            <fileset dir="src" includes="customApplicationComponents/*.customApplicationComponent"/>
+            <fileset dir="src" includes="remoteSiteSettings/"/>
+            <fileset dir="src" includes="staticresources/*.resource,staticresources/*-meta.xml"/>
+            <fileset dir="src" includes="tabs/*.tab"/>
+            <fileset dir="src" includes="triggers/*.trigger,triggers/*-meta.xml"/>
+            <fileset dir="src" includes="weblinks/"/>
+            <fileset dir="src" includes="workflows/*.workflow"/>
+            <fileset dir="src" includes="quickActions/*.quickAction"/>
+        </zip>
+    </target>
+
+</project>

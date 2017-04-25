@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<project name="deployOnly" xmlns:sf="antlib:com.salesforce">
+	<target name="deployOnly" depends="buildDeployOnly,clearPackage"/>
+	<target name="buildDeployOnly" depends="makePackage">
+	  <sf:deploy username="${sf.username}"
+				 password="${sf.password}" 
+				 serverurl="${sf.server}" 
+				 zipFile="deploy.zip" 
+				 testLevel="NoTestRun" 
+				 maxPoll="2000" 
+				 pollWaitMillis="10000" 
+				 rollbackOnError="true" 
+				 singlePackage="true" 
+				 allowMissingFiles="false"
+				 checkOnly="false"/>
+	  <antcall target="clearPackage" />
+	</target>
+</project>
