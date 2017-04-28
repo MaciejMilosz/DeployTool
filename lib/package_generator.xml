@@ -160,6 +160,9 @@
 		
 		<antcall target="generatePackageMembersDocuments" />
 		<antcall target="generatePackageMembersLabels" />		
+		<antcall target="generatePackageMembersEmailTemplates" />
+		<antcall target="generatePackageMembersReports" />
+		<antcall target="generatePackageMembersDashboards" />
 
 		<echo file="${stage.dir}/${target}" append="true"><![CDATA[	<version>${version}</version>
 </Package>]]></echo>
@@ -348,6 +351,178 @@
 				   strEcho='';
 			   } 
 			   catch(e){}
+
+			]]>
+		</script>
+	</target>
+
+	<target name="generatePackageMembersEmailTemplates">
+		<script language="javascript"> 
+			<![CDATA[
+			 var version = java.lang.System.getProperty("java.version");
+			 if (version.startsWith("1.8.0")) {
+				load("nashorn:mozilla_compat.js");
+			 }
+			 importPackage(java.io);	
+
+			 try
+			 { 
+			   var stage  = project.getProperty('stage.dir');
+			   var target  = project.getProperty('target');
+
+			   var msg = '';
+			   msg+='\t<types>\n';
+
+			   fs = project.createDataType("fileset");
+			   fs.setDir( new File("./" + stage + "/email/") );
+			   fs.setIncludes("*");
+			   var basedir  = fs.getDir(project);
+
+			   ds = fs.getDirectoryScanner(project);
+			   var srcDirs = ds.getIncludedDirectories();
+			   			   
+			   for(i = 0; i < srcDirs.length; i++){
+					msg += '\t\t<members>' + srcDirs[i] + '</members>\n';
+					
+					fs = project.createDataType("fileset");
+					fs.setDir( new File("./" + stage + "/email/" + srcDirs[i]) );
+					fs.setIncludes("*");
+					fs.setExcludes("*-meta.xml");
+					var basedir  = fs.getDir(project);
+					
+					ds = fs.getDirectoryScanner(project);
+					var srcFiles = ds.getIncludedFiles();
+					for (j=0; j<srcFiles.length; j++) 
+					{
+						msg += '\t\t<members>' + srcDirs[i] + '/' + srcFiles[j].substring(0, srcFiles[j].indexOf(".email")) + '</members>\n';
+					}
+			   }
+			   
+			   msg += '\t\t<name>EmailTemplate</name>\n';
+			   msg += '\t</types>\n';
+			   
+			   var file = new File('./' + stage + '/', target);
+			   echo = project.createTask("echo");
+			   echo.setMessage(msg);
+			   echo.setAppend(true);
+			   echo.setFile(file);
+			   echo.perform();
+			  }
+			  catch(e){} //Do nothing because folder might not exist, no issue
+			]]>
+		</script>
+	</target>
+
+	<target name="generatePackageMembersReports">
+		<script language="javascript"> 
+			<![CDATA[
+			 var version = java.lang.System.getProperty("java.version");
+			 if (version.startsWith("1.8.0")) {
+				load("nashorn:mozilla_compat.js");
+			 }
+			 importPackage(java.io);	
+
+			 try
+			 { 
+			   var stage  = project.getProperty('stage.dir');
+			   var target  = project.getProperty('target');
+
+			   var msg = '';
+			   msg+='\t<types>\n';
+
+			   fs = project.createDataType("fileset");
+			   fs.setDir( new File("./" + stage + "/reports/") );
+			   fs.setIncludes("*");
+			   var basedir  = fs.getDir(project);
+
+			   ds = fs.getDirectoryScanner(project);
+			   var srcDirs = ds.getIncludedDirectories();
+			   			   
+			   for(i = 0; i < srcDirs.length; i++){
+					msg += '\t\t<members>' + srcDirs[i] + '</members>\n';
+					
+					fs = project.createDataType("fileset");
+					fs.setDir( new File("./" + stage + "/reports/" + srcDirs[i]) );
+					fs.setIncludes("*");
+					fs.setExcludes("*-meta.xml");
+					var basedir  = fs.getDir(project);
+					
+					ds = fs.getDirectoryScanner(project);
+					var srcFiles = ds.getIncludedFiles();
+					for (j=0; j<srcFiles.length; j++) 
+					{
+						msg += '\t\t<members>' + srcDirs[i] + '/' + srcFiles[j].substring(0, srcFiles[j].indexOf(".report")) + '</members>\n';
+					}
+			   }
+			   
+			   msg += '\t\t<name>Report</name>\n';
+			   msg += '\t</types>\n';
+			   
+			   var file = new File('./' + stage + '/', target);
+			   echo = project.createTask("echo");
+			   echo.setMessage(msg);
+			   echo.setAppend(true);
+			   echo.setFile(file);
+			   echo.perform();
+			  }
+			  catch(e){} //Do nothing because folder might not exist, no issue
+			]]>
+		</script>
+	</target>
+
+	<target name="generatePackageMembersDashboards">
+		<script language="javascript"> 
+			<![CDATA[
+			 var version = java.lang.System.getProperty("java.version");
+			 if (version.startsWith("1.8.0")) {
+				load("nashorn:mozilla_compat.js");
+			 }
+			 importPackage(java.io);	
+
+			 try
+			 { 
+			   var stage  = project.getProperty('stage.dir');
+			   var target  = project.getProperty('target');
+
+			   var msg = '';
+			   msg+='\t<types>\n';
+
+			   fs = project.createDataType("fileset");
+			   fs.setDir( new File("./" + stage + "/dashboards/") );
+			   fs.setIncludes("*");
+			   var basedir  = fs.getDir(project);
+
+			   ds = fs.getDirectoryScanner(project);
+			   var srcDirs = ds.getIncludedDirectories();
+			   			   
+			   for(i = 0; i < srcDirs.length; i++){
+					msg += '\t\t<members>' + srcDirs[i] + '</members>\n';
+					
+					fs = project.createDataType("fileset");
+					fs.setDir( new File("./" + stage + "/dashboards/" + srcDirs[i]) );
+					fs.setIncludes("*");
+					fs.setExcludes("*-meta.xml");
+					var basedir  = fs.getDir(project);
+					
+					ds = fs.getDirectoryScanner(project);
+					var srcFiles = ds.getIncludedFiles();
+					for (j=0; j<srcFiles.length; j++) 
+					{
+						msg += '\t\t<members>' + srcDirs[i] + '/' + srcFiles[j].substring(0, srcFiles[j].indexOf(".dashboard")) + '</members>\n';
+					}
+			   }
+			   
+			   msg += '\t\t<name>Dashboard</name>\n';
+			   msg += '\t</types>\n';
+			   
+			   var file = new File('./' + stage + '/', target);
+			   echo = project.createTask("echo");
+			   echo.setMessage(msg);
+			   echo.setAppend(true);
+			   echo.setFile(file);
+			   echo.perform();
+			  }
+			  catch(e){} //Do nothing because folder might not exist, no issue
 			]]>
 		</script>
 	</target>
