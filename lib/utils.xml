@@ -137,14 +137,14 @@
             <echo message="Deploying to ${namespace} dev org." />
             <for list="${filesWithDeprecated}" param="fileWithDeprecated">
                 <sequential>
-                    <echo message="Commenting @deprecated in ${fileWithDeprecated}." />
-                    <replace file="${fileWithDeprecated}" token="@deprecated" value="//@deprecated"/>
+                    <echo message="Commenting @deprecated in @{fileWithDeprecated}." />
+                    <replace file="@{fileWithDeprecated}" token="@deprecated" value="//@deprecated"/>
                 </sequential>
             </for>
             <for list="${filesWithNamespace}" param="fileWithNamespace">
                 <sequential>
-                    <echo message="Changing namespace prefixes in ${fileWithNamespace}." />
-                    <replace file="${fileWithNamespace}" token="${mainNamespace}" value="${namespace}"/>
+                    <echo message="Changing namespace prefixes in @{fileWithNamespace}." />
+                    <replace file="@{fileWithNamespace}" token="${mainNamespace}" value="${namespace}"/>
                 </sequential>
             </for>
         <zip destfile="deploy.zip" update="true">
