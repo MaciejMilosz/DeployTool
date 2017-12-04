@@ -1,8 +1,6 @@
 # DeployTool
 Ant based tool for Salesforce deployment and validation
 
-
-
 ## How to use
 
 Just copy the src folder, run console, and proper ant target. This can be easly used by developers to deploy code into dev orgs. JDK and Ant needs to be installed.
