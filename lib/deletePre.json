@@ -1,0 +1,65 @@
+[
+    {
+        "objtyp": "ApexClass",
+        "objext": "cls",
+        "objdir": "classes",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "CustomObject",
+        "objext": "object",
+        "objdir": "objects",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "ApexComponent",
+        "objext": "component",
+        "objdir": "components",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "CustomApplicationComponent",
+        "objext": "customApplicationComponent",
+        "objdir": "customApplicationComponents",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "ApexPage",
+        "objext": "page",
+        "objdir": "pages",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "ApexTrigger",
+        "objext": "trigger",
+        "objdir": "triggers",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "CustomApplication",
+        "objext": "app",
+        "objdir": "applications",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "PermissionSet",
+        "objext": "permissionsets",
+        "objdir": "permissionset",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "Queue",
+        "objext": "queue",
+        "objdir": "queues",
+        "objflt": "*",
+        "objexc": ""
+    }
+]

@@ -131,6 +131,59 @@
     <target name="clearPackage">
       <delete file="deploy.zip" failonerror="false"/>
     </target>
+
+    <target name="deleteFromOrg">
+        <antcall target="generatePackage">
+            <param name="target" value="destructiveChanges.xml"/>
+            <param name="metadataPropFileSrc" value="./lib/deletePre.json" />
+        </antcall>
+        <echo file="src/package.xml"><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+            <Package xmlns="http://soap.sforce.com/2006/04/metadata">
+                 <version>${version}</version>
+            </Package>]]>
+        </echo>
+        <zip destfile="deleteChangesPre.zip" update="false">
+            <fileset dir="src" includes="destructiveChanges.xml"/>
+            <fileset dir="src" includes="package.xml"/>
+        </zip>
+        <delete file="src/destructiveChanges.xml" failonerror="false"/>
+        <antcall target="generatePackage">
+            <param name="target" value="destructiveChangesPost.xml"/>
+            <param name="metadataPropFileSrc" value="./lib/deletePost.json" />
+        </antcall>
+        <zip destfile="deleteChangesPost.zip" update="false">
+            <fileset dir="src" includes="destructiveChanges.xml"/>
+            <fileset dir="src" includes="package.xml"/>
+        </zip>
+        <delete file="src/destructiveChanges.xml" failonerror="false"/>
+
+        <echo message="Removing deployed changes."/>
+        <sf:deploy username="${sf.username}"
+                password="${sf.password}" 
+                serverurl="${sf.server}" 
+                zipFile="deleteChangesPre.zip" 
+                testLevel="NoTestRun" 
+                maxPoll="2000" 
+                pollWaitMillis="10000" 
+                rollbackOnError="true" 
+                singlePackage="true" 
+                allowMissingFiles="false"
+                checkOnly="false"/>
+        <sf:deploy username="${sf.username}"
+                password="${sf.password}" 
+                serverurl="${sf.server}" 
+                zipFile="deleteChangesPost.zip" 
+                testLevel="NoTestRun" 
+                maxPoll="2000" 
+                pollWaitMillis="10000" 
+                rollbackOnError="true" 
+                singlePackage="true" 
+                allowMissingFiles="false"
+                checkOnly="false"/>
+        <delete file="deleteChangesPre.zip" failonerror="false"/>
+        <delete file="deleteChangesPost.zip" failonerror="false"/>
+
+    </target>
        
     <target name="makePackage" description="Deploys code local src dir to salesforce org specified in build.properties!" depends="clearPackage, queryNamespace">
         <antcall target="generatePackage" />

@@ -1,0 +1,163 @@
+[
+    {
+        "objtyp": "ApexClass",
+        "objext": "cls",
+        "objdir": "classes",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "ApexComponent",
+        "objext": "component",
+        "objdir": "components",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "CustomApplicationComponent",
+        "objext": "customApplicationComponent",
+        "objdir": "customApplicationComponents",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "ApexPage",
+        "objext": "page",
+        "objdir": "pages",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "ApexTrigger",
+        "objext": "trigger",
+        "objdir": "triggers",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "Community",
+        "objext": "community",
+        "objdir": "communities",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "CustomApplication",
+        "objext": "app",
+        "objdir": "applications",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "CustomObject",
+        "objext": "object",
+        "objdir": "objects",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "CustomSite",
+        "objext": "site",
+        "objdir": "sites",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "CustomTab",
+        "objext": "tab",
+        "objdir": "tabs",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "HomePageComponent",
+        "objext": "homePageComponent",
+        "objdir": "homePageComponents",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "HomePageLayout",
+        "objext": "homePageLayout",
+        "objdir": "homePageLayouts",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "Layout",
+        "objext": "layout",
+        "objdir": "layouts",
+        "objflt": "*",
+        "objexc": "*SocialPost*"
+    },
+    {
+        "objtyp": "PermissionSet",
+        "objext": "permissionsets",
+        "objdir": "permissionset",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "Queue",
+        "objext": "queue",
+        "objdir": "queues",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "RemoteSiteSetting",
+        "objext": "remoteSite",
+        "objdir": "remoteSiteSettings",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "ReportType",
+        "objext": "reporttype",
+        "objdir": "reporttypes",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "Role",
+        "objext": "role",
+        "objdir": "roles",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "QuickAction",
+        "objext": "quickAction",
+        "objdir": "quickActions",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "Workflow",
+        "objext": "workflow",
+        "objdir": "workflows",
+        "objflt": "*",
+        "objexc": "Reply.workflow,SocialPost.workflow,Question.workflow"
+    },
+    {
+        "objtyp": "StaticResource",
+        "objext": "resource",
+        "objdir": "staticresources",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "CustomLabels",
+        "objext": "",
+        "objdir": "",
+        "objflt": "",
+        "objexc": ""
+    },
+    {
+        "objtyp": "Documents",
+        "objext": "",
+        "objdir": "",
+        "objflt": "",
+        "objexc": ""
+    }
+]

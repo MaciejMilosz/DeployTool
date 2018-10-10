@@ -1,8 +1,6 @@
 # DeployTool
 Ant based tool for Salesforce deployment and validation
 
-
-
 ## How to use
 
 Just copy the src folder, run console, and proper ant target. This can be easly used by developers to deploy code into dev orgs. JDK and Ant needs to be installed.
@@ -22,4 +20,4 @@ Just copy the src folder, run console, and proper ant target. This can be easly 
 * sf.filesWithNamespace: coma separated list of files with used namespace
 * sf.version: API version to use
 * sf.mainNamespace: main namespace used by the code (if is managed package code deployed to other org)
-* sf.server: https://www.salesforce.com or for sandboxes: https://test.salesforce.com
+* sf.server: https://www.login.salesforce.com or for sandboxes: https://test.salesforce.com

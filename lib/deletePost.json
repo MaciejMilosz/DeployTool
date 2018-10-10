@@ -1,0 +1,16 @@
+[
+    {
+        "objtyp": "StaticResource",
+        "objext": "resource",
+        "objdir": "staticresources",
+        "objflt": "*",
+        "objexc": ""
+    },
+    {
+        "objtyp": "CustomLabels",
+        "objext": "",
+        "objdir": "",
+        "objflt": "",
+        "objexc": ""
+    }
+]
