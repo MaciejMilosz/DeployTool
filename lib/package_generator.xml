@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
 <project name="packageGenerator" xmlns:sf="antlib:com.salesforce">
     
-    <property name="metadataPropFileSrc" value="${sf.metadataFile}"/>
+    <!--property name="metadataPropFileSrc" value="${sf.metadataFile}"/-->
+	<property name="metadataPropFileSrc" value="lib\\metadata.JSON"/>
     <property name="stage.dir" value="src"/>
     <property name="target" value="package.xml"/>
     <property name="version" value="${sf.version}"/>
@@ -95,7 +96,8 @@
                var objexc = project.getProperty('objexc');
                var stage  = project.getProperty('stage.dir');
                var target  = project.getProperty('target');
-
+				
+				java.lang.System.out.println('include: '  + objflt + "." + objext);
 
                var msg = '';
                msg+='\t<types>\n';
@@ -122,13 +124,13 @@
                     {            
                         if (line.indexOf('<fullName>') > -1)
                         {
-                          var objname = filename.substring(0,filename.indexOf("." + objext));       
+                          var objname = filename.substring(0,filename.indexOf("." + objext));
                           msg+='<members>'+ objname + '.' + line.substring(line.indexOf('<fullName>') + 10,line.indexOf('</fullName>')) + '</members>\n';
                         }
                     }
                     continue;
                    }
-                   filename = filename.substring(0,filename.indexOf("." + objext));       
+                   filename = filename.substring(0,filename.indexOf("." + objext));
                    msg+='\t\t<members>' + filename + '</members>\n';
                }
                msg+='\t\t<name>' + objtyp + '</name>\n';

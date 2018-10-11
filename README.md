@@ -4,6 +4,7 @@ Ant based tool for Salesforce deployment and validation
 ## How to use
 
 Just copy the src folder, run console, and proper ant target. This can be easly used by developers to deploy code into dev orgs. JDK and Ant needs to be installed.
+ant-salesforce api version - 41. If you nee to use older - pre 39 you will nee to modify targets. If you need to use newer please download it from your org via url: https://gs0.salesforce.com/dwnld/SfdcAnt/salesforce_ant_nn.0.zip where nn is api version you want.
 
 ### Targets
 

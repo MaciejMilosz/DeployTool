@@ -55,6 +55,13 @@
         "objflt": "*",
         "objexc": ""
     },
+	 {
+        "objtyp": "CustomMetadata",
+        "objext": "md",
+        "objdir": "customMetadata",
+        "objflt": "*",
+        "objexc": ""
+    },
     {
         "objtyp": "CustomSite",
         "objext": "site",

@@ -220,6 +220,7 @@
             <fileset dir="src" includes="weblinks/"/>
             <fileset dir="src" includes="workflows/*.workflow"/>
             <fileset dir="src" includes="quickActions/*.quickAction"/>
+			<fileset dir="src" includes="customMetadata/"/>
         </zip>
     </target>
 
